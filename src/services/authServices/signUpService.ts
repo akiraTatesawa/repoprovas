@@ -68,7 +68,10 @@ export class RegisterUserService implements IRegisterUserService {
     const isPasswordsMatching = this.isMatching({ password, confirmPassword });
 
     if (!isPasswordsMatching) {
-      throw new CustomError("error_conflict", "Passwords don't match");
+      throw new CustomError(
+        "error_unprocessable_entity",
+        "Passwords don't match"
+      );
     }
 
     const user = new User(email, password, this.cryptUtils);

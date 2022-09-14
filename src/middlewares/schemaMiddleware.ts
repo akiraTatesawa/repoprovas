@@ -16,13 +16,6 @@ type Validator = keyof typeof Schemas;
 export function validateBody(
   validator: Validator
 ): (req: Request, _res: Response, next: NextFunction) => Promise<void> {
-  if (!Object.hasOwn(Schemas, validator)) {
-    throw new CustomError(
-      "error_internal_server_error",
-      "Invalid schema validator"
-    );
-  }
-
   return async (req: Request, _res: Response, next: NextFunction) => {
     const { error } = Schemas[validator].validate(req.body, {
       abortEarly: false,

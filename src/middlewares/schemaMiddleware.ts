@@ -1,8 +1,15 @@
 import { NextFunction, Request, Response } from "express";
+import {
+  userSignInSchema as signIn,
+  userSignUpSchema as signUp,
+} from "../schemas/authSchemas";
 
 import { CustomError } from "../entities/CustomError";
 
-const Schemas = {};
+const Schemas = {
+  signIn,
+  signUp,
+};
 
 type Validator = keyof typeof Schemas;
 

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../entities/CustomError";
 import { Utils } from "../utils";
 
-export async function tokenValidationMiddleware(
+export async function validateToken(
   req: Request,
   res: Response,
   next: NextFunction

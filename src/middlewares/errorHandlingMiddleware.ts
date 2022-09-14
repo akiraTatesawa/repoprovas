@@ -39,7 +39,7 @@ interface ErrorHandlerObject extends ErrorRequestHandler, Error {
   message: string;
 }
 
-export async function errorHandlingMiddleware(
+export async function handleError(
   error: ErrorHandlerObject,
   _req: Request,
   res: Response,

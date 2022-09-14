@@ -31,9 +31,9 @@
         "object-curly-newline": "off",
         "@typescript-eslint/no-throw-literal": "off",
         "indent": "off",
-        "@typescript-eslint/indent": "warn",
-        
+        "@typescript-eslint/indent": "off",
         "@typescript-eslint/quotes": "off",
+        
         "camelcase": "error",
         "import/no-unresolved": "error",
         "@typescript-eslint/naming-convention": [
@@ -42,11 +42,7 @@
                 "selector": "interface",
                 "format": [
                     "PascalCase"
-                ],
-                "custom": {
-                    "regex": "^I[A-Z]",
-                    "match": false
-                }
+                ]
             }
         ],
         "class-methods-use-this": "off",

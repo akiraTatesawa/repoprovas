@@ -14,9 +14,9 @@ afterAll(async () => {
 describe("POST /sign-up", () => {
   it("Should create an user and return status 201", async () => {
     const reqBody = {
-      email: "teste@gmail.com",
-      password: "password",
-      confirmPassword: "password",
+      email: "test@gmail.com",
+      password: "password123",
+      confirmPassword: "password123",
     };
 
     const result = await supertest(server).post("/sign-up").send(reqBody);
@@ -27,7 +27,7 @@ describe("POST /sign-up", () => {
 
   it("Should return status 409 if the user is already registered", async () => {
     const reqBody = {
-      email: "teste@gmail.com",
+      email: "test@gmail.com",
       password: "password",
       confirmPassword: "password",
     };
@@ -43,7 +43,7 @@ describe("POST /sign-up", () => {
 
   it("Should return status 422 when body is invalid or passwords don't match", async () => {
     const invalidReqBody = {
-      email: "teste@gmail.com",
+      email: "test@gmail.com",
       password: "password",
       confirmPassword: "invalid-password",
     };

@@ -7,4 +7,4 @@ export const authRouter = Router();
 
 authRouter.post("/sign-up", validateBody("signUp"), Controllers.signUp);
 
-authRouter.post("/sign-in", validateBody("signIn"));
+authRouter.post("/sign-in", validateBody("signIn"), Controllers.signIn);

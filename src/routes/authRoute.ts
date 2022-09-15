@@ -1,10 +1,16 @@
 import { Router } from "express";
 import { validateBody } from "../middlewares/schemaMiddleware";
-
-import * as Controllers from "../controllers/authControllers";
+import {
+  signInController,
+  signUpController,
+} from "../controllers/authControllers/index";
 
 export const authRouter = Router();
 
-authRouter.post("/sign-up", validateBody("signUp"), Controllers.signUp);
+authRouter.post("/sign-up", validateBody("signUp"), (req, res) =>
+  signUpController.handle(req, res)
+);
 
-authRouter.post("/sign-in", validateBody("signIn"), Controllers.signIn);
+authRouter.post("/sign-in", validateBody("signIn"), (req, res) =>
+  signInController.handle(req, res)
+);

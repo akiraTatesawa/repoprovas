@@ -8,6 +8,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await prisma.$executeRaw`TRUNCATE TABLE users;`;
   await prisma.$disconnect();
 });
 
@@ -15,15 +16,15 @@ describe("POST /sign-in", () => {
   it("Should be able to log in", async () => {
     const registerBody = {
       email: "test@gmail.com",
-      password: "password123",
-      confirmPassword: "password123",
+      password: "password",
+      confirmPassword: "password",
     };
 
     await supertest(server).post("/sign-up").send(registerBody);
 
     const reqBody = {
       email: "test@gmail.com",
-      password: "password123",
+      password: "password",
     };
 
     const result = await supertest(server).post("/sign-in").send(reqBody);
@@ -44,6 +45,14 @@ describe("POST /sign-in", () => {
   });
 
   it("Should return status 401 when password is incorrect", async () => {
+    const registerBody = {
+      email: "test@gmail.com",
+      password: "password",
+      confirmPassword: "password",
+    };
+
+    await supertest(server).post("/sign-up").send(registerBody);
+
     const reqBody = {
       email: "test@gmail.com",
       password: "incorrect-password",
@@ -56,7 +65,7 @@ describe("POST /sign-in", () => {
 
   it("Should return status 404 when user does not exist", async () => {
     const reqBody = {
-      email: "user@gmail.com",
+      email: "user1@gmail.com",
       password: "password",
     };
 

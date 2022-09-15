@@ -52,5 +52,6 @@ export async function handleError(
     return res.status(status).json({ name, message });
   }
 
+  console.log(error);
   return res.sendStatus(500);
 }

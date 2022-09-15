@@ -2,6 +2,7 @@ import { IServiceExecute } from "../../@types/serviceTypes";
 import { ITestRepository, TestData } from "../../repositories/testRepository";
 import { CustomError } from "../../entities/CustomError";
 import { IValidateTeacherDisciplineService } from "../teacherDisciplineServices/validateId";
+import { Test } from "../../entities/Test";
 
 export interface ICreateTestService extends IServiceExecute<TestData, void> {}
 
@@ -34,6 +35,8 @@ export class CreateTestService implements ICreateTestService {
       );
     }
 
-    await this.repository.create(data);
+    const test = new Test(data);
+
+    await this.repository.create(test);
   }
 }

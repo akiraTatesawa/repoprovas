@@ -10,7 +10,7 @@
     "test": "dotenv -e .env.test -- npx prisma migrate dev && jest",
     "build": "npx tsc && prisma generate && npx prisma migrate deploy",
     "start": "node ./dist/server.js",
-    "dev": "dotenv -e .env ts-node-dev --respawn --transpile-only --exit-child --ignore-watch node_modules ./src/server.ts "
+    "dev": "NODE_ENV=dev ts-node-dev --respawn --transpile-only --exit-child --ignore-watch node_modules ./src/server.ts "
   },
   "keywords": [],
   "author": "",

@@ -3,12 +3,14 @@ import {
   userSignInSchema as signIn,
   userSignUpSchema as signUp,
 } from "../schemas/authSchemas";
+import { testSchema as test } from "../schemas/testSchemas";
 
 import { CustomError } from "../entities/CustomError";
 
 const Schemas = {
   signIn,
   signUp,
+  test,
 };
 
 type Validator = keyof typeof Schemas;

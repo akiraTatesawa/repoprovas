@@ -33,6 +33,7 @@
         "indent": "off",
         "@typescript-eslint/indent": "off",
         "@typescript-eslint/quotes": "off",
+        "@typescript-eslint/brace-style": "off",
         
         "camelcase": "error",
         "import/no-unresolved": "error",

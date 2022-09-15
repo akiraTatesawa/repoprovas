@@ -8,13 +8,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await prisma.$executeRaw`TRUNCATE TABLE users;`;
   await prisma.$disconnect();
 });
 
 describe("POST /sign-up", () => {
   it("Should create an user and return status 201", async () => {
     const reqBody = {
-      email: "test@gmail.com",
+      email: "user@gmail.com",
       password: "password123",
       confirmPassword: "password123",
     };
@@ -27,7 +28,7 @@ describe("POST /sign-up", () => {
 
   it("Should return status 409 if the user is already registered", async () => {
     const reqBody = {
-      email: "test@gmail.com",
+      email: "user@gmail.com",
       password: "password",
       confirmPassword: "password",
     };

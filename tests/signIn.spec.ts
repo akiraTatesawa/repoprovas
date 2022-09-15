@@ -2,8 +2,9 @@
 import supertest from "supertest";
 import { server } from "../src/app";
 import { prisma } from "../src/config/prisma";
+import { UserFactory } from "./factories/userFactory";
 
-beforeAll(async () => {
+beforeEach(async () => {
   await prisma.$executeRaw`TRUNCATE TABLE users;`;
 });
 
@@ -14,62 +15,56 @@ afterAll(async () => {
 
 describe("POST /sign-in", () => {
   it("Should be able to log in", async () => {
-    const registerBody = {
-      email: "test@gmail.com",
-      password: "password",
-      confirmPassword: "password",
-    };
+    const { email, password, hashedPassword } = new UserFactory().createUser();
 
-    await supertest(server).post("/sign-up").send(registerBody);
+    await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+      },
+    });
 
-    const reqBody = {
-      email: "test@gmail.com",
-      password: "password",
-    };
-
-    const result = await supertest(server).post("/sign-in").send(reqBody);
+    const result = await supertest(server)
+      .post("/sign-in")
+      .send({ email, password });
 
     expect(result.status).toEqual(200);
     expect(result.body).toHaveProperty("token");
   });
 
   it("Should return status 422 when body is invalid", async () => {
-    const reqBody = {
-      email: "test@gmail.com",
-      password: "",
-    };
+    const { email } = new UserFactory().createUser();
 
-    const result = await supertest(server).post("/sign-in").send(reqBody);
+    const result = await supertest(server)
+      .post("/sign-in")
+      .send({ email, password: "" });
 
     expect(result.status).toEqual(422);
   });
 
   it("Should return status 401 when password is incorrect", async () => {
-    const registerBody = {
-      email: "test@gmail.com",
-      password: "password",
-      confirmPassword: "password",
-    };
+    const { email, hashedPassword } = new UserFactory().createUser();
 
-    await supertest(server).post("/sign-up").send(registerBody);
+    await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+      },
+    });
 
-    const reqBody = {
-      email: "test@gmail.com",
-      password: "incorrect-password",
-    };
-
-    const result = await supertest(server).post("/sign-in").send(reqBody);
+    const result = await supertest(server)
+      .post("/sign-in")
+      .send({ email, password: "incorrect-password" });
 
     expect(result.status).toEqual(401);
   });
 
   it("Should return status 404 when user does not exist", async () => {
-    const reqBody = {
-      email: "user1@gmail.com",
-      password: "password",
-    };
+    const { email, password } = new UserFactory().createUser();
 
-    const result = await supertest(server).post("/sign-in").send(reqBody);
+    const result = await supertest(server)
+      .post("/sign-in")
+      .send({ email, password });
 
     expect(result.status).toEqual(404);
   });

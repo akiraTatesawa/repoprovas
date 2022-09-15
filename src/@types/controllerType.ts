@@ -7,5 +7,5 @@ export abstract class Controller<T> {
     this.service = service;
   }
 
-  abstract implement(req: Request, res: Response): Promise<void>;
+  abstract handle(req: Request, res: Response): Promise<void>;
 }

@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { validateToken } from "../middlewares/tokenValidationMiddleware";
 import { validateBody } from "../middlewares/schemaMiddleware";
-import { createTestController } from "../controllers/testControllers/index";
-import { main } from "../repositories/testRepository";
+import {
+  createTestController,
+  getTestsByDisciplinesController,
+} from "../controllers/testControllers/index";
 
 export const testRouter = Router();
 
@@ -10,7 +12,6 @@ testRouter.post("/", validateToken, validateBody("test"), (req, res) =>
   createTestController.handle(req, res)
 );
 
-testRouter.get("/", async (req, res) => {
-  const get = await main();
-  res.json(get);
-});
+testRouter.get("/disciplines", validateToken, (req, res) =>
+  getTestsByDisciplinesController.handle(req, res)
+);

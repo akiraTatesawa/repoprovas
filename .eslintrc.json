@@ -36,6 +36,7 @@
         "@typescript-eslint/brace-style": "off",
         "implicit-arrow-linebreak":"off",
         "function-paren-newline":"off",
+        "no-plusplus":"off",
         
         "camelcase": "error",
         "import/no-unresolved": "error",

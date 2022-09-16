@@ -2,13 +2,18 @@ import { randEmail, randPassword } from "@ngneat/falso";
 import { IRegisterUserRequest } from "../../src/services/authServices/signUpService";
 import { Utils } from "../../src/utils";
 
+type Header = {
+  Authorization: string;
+};
+
 interface IUserRegisterFactory {
   createUserRequest(): IRegisterUserRequest;
   createUserRequestUnmatchedPassword(): IRegisterUserRequest;
 }
 
 interface IUserLoginFactory {
-  createUser(): { email: string; password: string; hashedPassword: string };
+  createInvalidToken(): Header;
+  createInvalidFormatToken(): Header;
 }
 
 export class UserFactory implements IUserRegisterFactory, IUserLoginFactory {
@@ -41,11 +46,15 @@ export class UserFactory implements IUserRegisterFactory, IUserLoginFactory {
     };
   }
 
-  createUser(): { email: string; password: string; hashedPassword: string } {
+  createInvalidToken(): Header {
     return {
-      email: this.email,
-      password: this.password,
-      hashedPassword: this.hashedPassword,
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR4cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTY2MzI2ODk4NX0.iPzYbbgffs6_Oh_NKHO61ep2kRIPD_THefbwPa1aw7c`,
+    };
+  }
+
+  createInvalidFormatToken(): Header {
+    return {
+      Authorization: "invalid format without Bearer",
     };
   }
 }

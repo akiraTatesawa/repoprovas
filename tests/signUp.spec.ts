@@ -23,6 +23,7 @@ describe("POST /sign-up", () => {
   });
 
   it("Should return status 409 if the user is already registered", async () => {
+    // Fix
     const user = await new UserFactory().createUser();
 
     const result = await supertest(server).post("/sign-up").send(user);

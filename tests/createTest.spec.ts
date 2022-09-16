@@ -31,8 +31,8 @@ describe("POST /tests", () => {
 
   it("Should not be able to create a test with an invalid test format", async () => {
     const token = new UserFactory().createValidToken();
-    const invalidTest = new TestFactory().createInvalidTest();
 
+    const invalidTest = new TestFactory().createInvalidTest();
     const resultTest = await supertest(server)
       .post("/tests")
       .set(token)
@@ -53,7 +53,6 @@ describe("POST /tests", () => {
   it("Should not be able to create a test with an invalid token format", async () => {
     const validTest = new TestFactory().createValidTest();
     const invalidTokenFormat = new UserFactory().createInvalidFormatToken();
-
     const resultTest = await supertest(server)
       .post("/tests")
       .set(invalidTokenFormat)
@@ -66,7 +65,6 @@ describe("POST /tests", () => {
   it("Should not be able to create a test with an invalid token", async () => {
     const validTest = new TestFactory().createValidTest();
     const invalidToken = new UserFactory().createInvalidToken();
-
     const resultTest = await supertest(server)
       .post("/tests")
       .set(invalidToken)

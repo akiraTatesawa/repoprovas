@@ -14,6 +14,7 @@ describe("POST /sign-in", () => {
     await prisma.$disconnect();
   });
   it("Should be able to log in", async () => {
+    // Fix
     const user = await new UserFactory().createUser();
 
     const result = await supertest(server)
@@ -35,6 +36,7 @@ describe("POST /sign-in", () => {
   });
 
   it("Should return status 401 when password is incorrect", async () => {
+    // Fix
     const user = await new UserFactory().createUser();
 
     const result = await supertest(server)

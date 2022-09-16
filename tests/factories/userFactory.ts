@@ -1,6 +1,7 @@
 import { randEmail, randPassword } from "@ngneat/falso";
 import { IRegisterUserRequest } from "../../src/services/authServices/signUpService";
 import { Utils } from "../../src/utils";
+import { prisma } from "../../src/config/prisma";
 
 type Header = {
   Authorization: string;
@@ -9,6 +10,7 @@ type Header = {
 interface IUserRegisterFactory {
   createUserRequest(): IRegisterUserRequest;
   createUserRequestUnmatchedPassword(): IRegisterUserRequest;
+  createUser(): Promise<IRegisterUserRequest>;
 }
 
 interface IUserLoginFactory {
@@ -46,6 +48,14 @@ export class UserFactory implements IUserRegisterFactory, IUserLoginFactory {
     };
   }
 
+  createValidToken(): Header {
+    const token = Utils.JwtUtils.createToken({ userId: 4 });
+
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
   createInvalidToken(): Header {
     return {
       Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR4cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTY2MzI2ODk4NX0.iPzYbbgffs6_Oh_NKHO61ep2kRIPD_THefbwPa1aw7c`,
@@ -56,5 +66,15 @@ export class UserFactory implements IUserRegisterFactory, IUserLoginFactory {
     return {
       Authorization: "invalid format without Bearer",
     };
+  }
+
+  async createUser(): Promise<IRegisterUserRequest> {
+    const user = { email: this.email, password: this.hashedPassword };
+
+    await prisma.user.create({
+      data: user,
+    });
+
+    return this.createUserRequest();
   }
 }

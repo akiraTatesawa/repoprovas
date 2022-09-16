@@ -4,20 +4,17 @@ import { server } from "../src/app";
 import { prisma } from "../src/config/prisma";
 import { UserFactory } from "./factories/userFactory";
 
-beforeEach(async () => {
-  await prisma.$executeRaw`TRUNCATE TABLE users;`;
-});
-
-afterAll(async () => {
-  await prisma.$executeRaw`TRUNCATE TABLE users;`;
-  await prisma.$disconnect();
-});
-
 describe("POST /sign-in", () => {
-  it("Should be able to log in", async () => {
-    const user = new UserFactory().createUserRequest();
+  beforeEach(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE users;`;
+  });
 
-    await supertest(server).post("/sign-up").send(user);
+  afterAll(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE users;`;
+    await prisma.$disconnect();
+  });
+  it("Should be able to log in", async () => {
+    const user = await new UserFactory().createUser();
 
     const result = await supertest(server)
       .post("/sign-in")
@@ -28,9 +25,7 @@ describe("POST /sign-in", () => {
   });
 
   it("Should return status 422 when body is invalid", async () => {
-    const user = new UserFactory().createUserRequest();
-
-    await supertest(server).post("/sign-up").send(user);
+    const user = await new UserFactory().createUser();
 
     const result = await supertest(server)
       .post("/sign-in")
@@ -40,8 +35,7 @@ describe("POST /sign-in", () => {
   });
 
   it("Should return status 401 when password is incorrect", async () => {
-    const user = new UserFactory().createUserRequest();
-    await supertest(server).post("/sign-up").send(user);
+    const user = await new UserFactory().createUser();
 
     const result = await supertest(server)
       .post("/sign-in")

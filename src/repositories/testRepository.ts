@@ -1,3 +1,4 @@
+/* eslint-disable no-confusing-arrow */
 import { Test } from "@prisma/client";
 import { IRepoCreate } from "../@types/repositoryTypes";
 import { prisma } from "../config/prisma";
@@ -78,12 +79,14 @@ export class TestRepository implements ITestRepository {
         ...term,
         disciplines: term.disciplines.map((discipline) => ({
           ...discipline,
-          categories: discipline.categories.map((category) => ({
-            ...category,
-            tests: category.tests.filter(
-              (test) => test.teacherDiscipline.disciplineId === discipline.id
-            ),
-          })),
+          categories: discipline.categories
+            .map((category) => ({
+              ...category,
+              tests: category.tests.filter(
+                (test) => test.teacherDiscipline.disciplineId === discipline.id
+              ),
+            }))
+            .filter((category) => category.tests[0]),
         })),
       })
     );
@@ -91,4 +94,3 @@ export class TestRepository implements ITestRepository {
     return tests;
   }
 }
-export const main = async () => new TestRepository().getAllTestsPerDiscipline();

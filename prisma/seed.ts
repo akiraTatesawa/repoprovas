@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 interface ISeed {
   main(): Promise<void>;
 }
-
 class Seed implements ISeed {
   private prisma: PrismaClient = new PrismaClient();
 

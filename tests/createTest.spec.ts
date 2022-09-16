@@ -5,29 +5,19 @@ import { prisma } from "../src/config/prisma";
 import { TestFactory } from "./factories/testFactory";
 import { UserFactory } from "./factories/userFactory";
 
-beforeEach(async () => {
-  await prisma.$executeRaw`TRUNCATE TABLE tests;`;
-  await prisma.$executeRaw`TRUNCATE TABLE users;`;
-});
-
-afterAll(async () => {
-  await prisma.$executeRaw`TRUNCATE TABLE tests;`;
-  await prisma.$executeRaw`TRUNCATE TABLE users;`;
-  await prisma.$disconnect();
-});
-
 describe("POST /tests", () => {
+  beforeEach(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE tests;`;
+    await prisma.$executeRaw`TRUNCATE TABLE users;`;
+  });
+
+  afterAll(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE tests;`;
+    await prisma.$executeRaw`TRUNCATE TABLE users;`;
+    await prisma.$disconnect();
+  });
   it("Should be able to create a test", async () => {
-    const user = new UserFactory().createUserRequest();
-    await supertest(server).post("/sign-up").send(user);
-    const resultSignIn = await supertest(server)
-      .post("/sign-in")
-      .send({ email: user.email, password: user.password });
-
-    const token = {
-      Authorization: `Bearer ${resultSignIn.body.token}`,
-    };
-
+    const token = new UserFactory().createValidToken();
     const validTest = new TestFactory().createValidTest();
 
     const resultTest = await supertest(server)
@@ -40,18 +30,9 @@ describe("POST /tests", () => {
   });
 
   it("Should not be able to create a test with an invalid test format", async () => {
-    const user = new UserFactory().createUserRequest();
-    await supertest(server).post("/sign-up").send(user);
-
-    const resultSignIn = await supertest(server)
-      .post("/sign-in")
-      .send({ email: user.email, password: user.password });
-
-    const token = {
-      Authorization: `Bearer ${resultSignIn.body.token}`,
-    };
-
+    const token = new UserFactory().createValidToken();
     const invalidTest = new TestFactory().createInvalidTest();
+
     const resultTest = await supertest(server)
       .post("/tests")
       .set(token)
@@ -72,6 +53,7 @@ describe("POST /tests", () => {
   it("Should not be able to create a test with an invalid token format", async () => {
     const validTest = new TestFactory().createValidTest();
     const invalidTokenFormat = new UserFactory().createInvalidFormatToken();
+
     const resultTest = await supertest(server)
       .post("/tests")
       .set(invalidTokenFormat)
@@ -84,6 +66,7 @@ describe("POST /tests", () => {
   it("Should not be able to create a test with an invalid token", async () => {
     const validTest = new TestFactory().createValidTest();
     const invalidToken = new UserFactory().createInvalidToken();
+
     const resultTest = await supertest(server)
       .post("/tests")
       .set(invalidToken)

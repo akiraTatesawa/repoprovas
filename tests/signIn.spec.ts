@@ -15,56 +15,47 @@ afterAll(async () => {
 
 describe("POST /sign-in", () => {
   it("Should be able to log in", async () => {
-    const { email, password, hashedPassword } = new UserFactory().createUser();
+    const user = new UserFactory().createUserRequest();
 
-    await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
+    await supertest(server).post("/sign-up").send(user);
 
     const result = await supertest(server)
       .post("/sign-in")
-      .send({ email, password });
+      .send({ email: user.email, password: user.password });
 
     expect(result.status).toEqual(200);
     expect(result.body).toHaveProperty("token");
   });
 
   it("Should return status 422 when body is invalid", async () => {
-    const { email } = new UserFactory().createUser();
+    const user = new UserFactory().createUserRequest();
+
+    await supertest(server).post("/sign-up").send(user);
 
     const result = await supertest(server)
       .post("/sign-in")
-      .send({ email, password: "" });
+      .send({ email: user.email, password: user.password, invalidField: "" });
 
     expect(result.status).toEqual(422);
   });
 
   it("Should return status 401 when password is incorrect", async () => {
-    const { email, hashedPassword } = new UserFactory().createUser();
-
-    await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
+    const user = new UserFactory().createUserRequest();
+    await supertest(server).post("/sign-up").send(user);
 
     const result = await supertest(server)
       .post("/sign-in")
-      .send({ email, password: "incorrect-password" });
+      .send({ email: user.email, password: "incorrect-password" });
 
     expect(result.status).toEqual(401);
   });
 
   it("Should return status 404 when user does not exist", async () => {
-    const { email, password } = new UserFactory().createUser();
+    const user = new UserFactory().createUserRequest();
 
     const result = await supertest(server)
       .post("/sign-in")
-      .send({ email, password });
+      .send({ email: user.email, password: user.password });
 
     expect(result.status).toEqual(404);
   });

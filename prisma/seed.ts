@@ -56,15 +56,83 @@ class Seed implements ISeed {
       console.log("OK!");
 
       console.log("\nInserting disciplines...");
-      await this.prisma.discipline.createMany({
-        data: [
-          { name: "HTML e CSS", termId: 1 },
-          { name: "JavaScript", termId: 2 },
-          { name: "React", termId: 3 },
-          { name: "Humildade", termId: 1 },
-          { name: "Planejamento", termId: 2 },
-          { name: "Autoconfiança", termId: 3 },
-        ],
+      await this.prisma.discipline.create({
+        data: {
+          name: "HTML e CSS",
+          termId: 1,
+          categories: {
+            connect: [
+              { name: "Projeto" },
+              { name: "Prática" },
+              { name: "Recuperação" },
+            ],
+          },
+        },
+      });
+      await this.prisma.discipline.create({
+        data: {
+          name: "JavaScript",
+          termId: 2,
+          categories: {
+            connect: [
+              { name: "Projeto" },
+              { name: "Prática" },
+              { name: "Recuperação" },
+            ],
+          },
+        },
+      });
+      await this.prisma.discipline.create({
+        data: {
+          name: "React",
+          termId: 3,
+          categories: {
+            connect: [
+              { name: "Projeto" },
+              { name: "Prática" },
+              { name: "Recuperação" },
+            ],
+          },
+        },
+      });
+      await this.prisma.discipline.create({
+        data: {
+          name: "Humildade",
+          termId: 1,
+          categories: {
+            connect: [
+              { name: "Projeto" },
+              { name: "Prática" },
+              { name: "Recuperação" },
+            ],
+          },
+        },
+      });
+      await this.prisma.discipline.create({
+        data: {
+          name: "Planejamento",
+          termId: 2,
+          categories: {
+            connect: [
+              { name: "Projeto" },
+              { name: "Prática" },
+              { name: "Recuperação" },
+            ],
+          },
+        },
+      });
+      await this.prisma.discipline.create({
+        data: {
+          name: "Autoconfiança",
+          termId: 3,
+          categories: {
+            connect: [
+              { name: "Projeto" },
+              { name: "Prática" },
+              { name: "Recuperação" },
+            ],
+          },
+        },
       });
       console.log("OK!");
 

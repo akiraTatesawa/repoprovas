@@ -20,10 +20,11 @@ model User {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  tests     Test[]
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  tests       Test[]
+  disciplines Discipline[]
 
   @@map("categories")
 }
@@ -44,6 +45,7 @@ model Discipline {
   termId              Int
   createdAt           DateTime            @default(now())
   teachersDisciplines TeacherDiscipline[]
+  categories          Category[]
 
   @@map("disciplines")
 }
@@ -63,7 +65,7 @@ model TeacherDiscipline {
   disciplineId Int
   teacher      Teacher    @relation(fields: [teacherId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   teacherId    Int
-  Test         Test[]
+  tests        Test[]
 
   @@map("disciplines_teachers")
 }

@@ -93,4 +93,56 @@ export class TestRepository implements ITestRepository {
 
     return tests;
   }
+
+  async getTestsByTeacher() {
+    const teachers = await prisma.teacher.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    const categoriesPromise = [];
+    for (let k = 0; k < teachers.length; k++) {
+      categoriesPromise.push(
+        prisma.category.findMany({
+          select: {
+            id: true,
+            name: true,
+            tests: {
+              where: {
+                teacherDiscipline: {
+                  teacherId: teachers[k].id,
+                },
+              },
+              include: {
+                teacherDiscipline: {
+                  select: {
+                    discipline: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        })
+      );
+    }
+    const categories = await Promise.all(categoriesPromise);
+
+    const teacherTests = [];
+    for (let j = 0; j < teachers.length; j++) {
+      teacherTests.push({
+        id: teachers[j].id,
+        name: teachers[j].name,
+        categories: categories[j],
+      });
+    }
+
+    return teacherTests;
+  }
 }

@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "RepoProvas",
-    "dateExported": "2022-09-17T20:29:01.047Z",
+    "dateExported": "2022-09-17T21:19:16.849Z",
     "version": "1.1",
     "folders": [
         {
@@ -475,6 +475,38 @@
                     "custom": "",
                     "action": "equal",
                     "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "300db376-7978-485b-a642-0212a64dc290",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "422 :: Unprocessable Entity Login Error",
+            "url": "{{URL}}/sign-in",
+            "method": "POST",
+            "sortNum": 100000,
+            "created": "2022-09-17T21:18:30.137Z",
+            "modified": "2022-09-17T21:18:49.290Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"random@gmail.com\",\n  \"password\": \"pass1234\",\n  \"invalidField\": \"invalid\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "422"
                 },
                 {
                     "type": "res-body",

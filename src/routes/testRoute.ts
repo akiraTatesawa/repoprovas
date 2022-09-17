@@ -4,8 +4,8 @@ import { validateBody } from "../middlewares/schemaMiddleware";
 import {
   createTestController,
   getTestsByDisciplinesController,
+  getTestsByTeacherController,
 } from "../controllers/testControllers/index";
-import { TestRepository } from "../repositories/testRepository";
 
 export const testRouter = Router();
 
@@ -17,6 +17,6 @@ testRouter.get("/disciplines", validateToken, (req, res) =>
   getTestsByDisciplinesController.handle(req, res)
 );
 
-testRouter.get("/teachers", async (req, res) =>
-  res.send(await new TestRepository().getTestsByTeacher())
+testRouter.get("/teachers", validateToken, async (req, res) =>
+  getTestsByTeacherController.handle(req, res)
 );

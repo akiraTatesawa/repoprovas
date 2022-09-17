@@ -27,8 +27,29 @@ export interface ITestsByDiscipline {
   number: number;
 }
 
+export interface ITestByTeacher {
+  id: number;
+  name: string;
+  categories: {
+    id: number;
+    name: string;
+    tests: {
+      id: number;
+      name: string;
+      pdfUrl: string;
+      teacherDiscipline: {
+        discipline: {
+          id: number;
+          name: string;
+        };
+      };
+    }[];
+  }[];
+}
+
 export interface ITestRepository extends IRepoCreate<TestData> {
   getAllTestsPerDiscipline(): Promise<ITestsByDiscipline[]>;
+  getTestsByTeacher(): Promise<ITestByTeacher[]>;
 }
 
 export class TestRepository implements ITestRepository {
@@ -94,7 +115,7 @@ export class TestRepository implements ITestRepository {
     return tests;
   }
 
-  async getTestsByTeacher() {
+  async getTestsByTeacher(): Promise<ITestByTeacher[]> {
     const teachers = await prisma.teacher.findMany({
       select: {
         id: true,
@@ -103,7 +124,7 @@ export class TestRepository implements ITestRepository {
     });
 
     const categoriesPromise = [];
-    for (let k = 0; k < teachers.length; k++) {
+    for (let i = 0; i < teachers.length; i++) {
       categoriesPromise.push(
         prisma.category.findMany({
           select: {
@@ -112,10 +133,13 @@ export class TestRepository implements ITestRepository {
             tests: {
               where: {
                 teacherDiscipline: {
-                  teacherId: teachers[k].id,
+                  teacherId: teachers[i].id,
                 },
               },
-              include: {
+              select: {
+                id: true,
+                name: true,
+                pdfUrl: true,
                 teacherDiscipline: {
                   select: {
                     discipline: {

@@ -11,6 +11,6 @@ export class SignInController extends Controller<ILoginUserService> {
 
     const token = await this.service.execute(data);
 
-    res.send(token);
+    res.status(200).send(token);
   }
 }

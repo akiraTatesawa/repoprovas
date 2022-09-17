@@ -1,7 +1,7 @@
-import { CategoryRepository } from "../../repositories/categoryRepository";
 import { ValidateCategoryService } from "./validateCategoryService";
+import { mockCategoryRepository } from "../../repositories/mocks/index";
 
-const repository = new CategoryRepository();
+const repository = mockCategoryRepository();
 const validateCategoryService = new ValidateCategoryService(repository);
 
 describe("Validate Category Service", () => {
@@ -14,11 +14,7 @@ describe("Validate Category Service", () => {
   });
 
   it("Should return true if category exists", async () => {
-    jest.spyOn(repository, "getById").mockResolvedValueOnce({
-      id: 1,
-      name: "validName",
-      createdAt: new Date(),
-    });
+    jest.spyOn(repository, "getById").mockResolvedValueOnce({});
 
     await expect(validateCategoryService.execute(1)).resolves.toEqual(true);
 

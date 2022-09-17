@@ -36,10 +36,7 @@ describe("Login User Service", () => {
         email: "example@gmail.com",
         password: "password",
       })
-    ).rejects.toEqual({
-      message: "Wrong Password",
-      type: "error_unauthorized",
-    });
+    ).rejects.toEqual({ message: "User not found", type: "error_not_found" });
 
     expect(repository.getByEmail).toHaveBeenCalled();
   });
@@ -58,7 +55,10 @@ describe("Login User Service", () => {
         email: "example@gmail.com",
         password: "password",
       })
-    ).rejects.toEqual({ message: "User not found", type: "error_not_found" });
+    ).rejects.toEqual({
+      message: "Wrong Password",
+      type: "error_unauthorized",
+    });
 
     expect(repository.getByEmail).toHaveBeenCalled();
     expect(cryptUtils.validateEncryptedData).toHaveBeenCalled();

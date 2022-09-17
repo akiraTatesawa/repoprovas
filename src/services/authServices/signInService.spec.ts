@@ -1,28 +1,66 @@
+import { mockUserRepository } from "../../repositories/mocks";
 import { LoginUserService } from "./signInService";
-import { CustomError } from "../../entities/CustomError";
+import { mockJWTUtils, mockCryptUtils } from "../../utils/mocks/index";
 
-const createUserSpy = jest.fn();
-const getUserByEmailSpy = jest.fn();
+const repository = mockUserRepository();
+const jwtUtils = mockJWTUtils();
+const cryptUtils = mockCryptUtils();
 
-const createTokenSpy = jest.fn();
-const verifyTokenSpy = jest.fn();
+const loginUserService = new LoginUserService(repository, jwtUtils, cryptUtils);
 
-const hashDataSpy = jest.fn();
-const validateEncryptSpy = jest.fn();
+describe("Login User Service", () => {
+  it("Should be able to login", async () => {
+    jest.spyOn(repository, "getByEmail").mockResolvedValueOnce({
+      email: "example@gmail.com",
+      password: "password",
+    });
+    jest
+      .spyOn(cryptUtils, "validateEncryptedData")
+      .mockImplementationOnce(() => true);
+    jest.spyOn(jwtUtils, "createToken").mockReturnValueOnce("token");
 
-const loginUserService = new LoginUserService(
-  { create: createUserSpy, getByEmail: getUserByEmailSpy },
-  { createToken: createTokenSpy, verifyToken: verifyTokenSpy },
-  { hashDataBcrypt: hashDataSpy, validateEncryptedData: validateEncryptSpy }
-);
-
-describe("Register User", () => {
-  it("Should not be able to login if user does not exist", async () => {
     await expect(
       loginUserService.execute({
         email: "example@gmail.com",
         password: "password",
       })
-    ).rejects.toEqual(new CustomError("error_not_found", "User not found"));
+    ).resolves.toEqual({ token: "token" });
+
+    expect(repository.getByEmail).toHaveBeenCalled();
+    expect(cryptUtils.validateEncryptedData).toHaveBeenCalled();
+  });
+  it("Should not be able to login if user does not exist", async () => {
+    jest.spyOn(repository, "getByEmail").mockResolvedValueOnce(null);
+    await expect(
+      loginUserService.execute({
+        email: "example@gmail.com",
+        password: "password",
+      })
+    ).rejects.toEqual({
+      message: "Wrong Password",
+      type: "error_unauthorized",
+    });
+
+    expect(repository.getByEmail).toHaveBeenCalled();
+  });
+
+  it("Should not be able to login if password is wrong", async () => {
+    jest.spyOn(repository, "getByEmail").mockResolvedValueOnce({
+      email: "example@gmail.com",
+      password: "password",
+    });
+    jest
+      .spyOn(cryptUtils, "validateEncryptedData")
+      .mockImplementationOnce(() => false);
+
+    await expect(
+      loginUserService.execute({
+        email: "example@gmail.com",
+        password: "password",
+      })
+    ).rejects.toEqual({ message: "User not found", type: "error_not_found" });
+
+    expect(repository.getByEmail).toHaveBeenCalled();
+    expect(cryptUtils.validateEncryptedData).toHaveBeenCalled();
   });
 });

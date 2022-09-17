@@ -5,10 +5,13 @@ import { GetTestsByDisciplinesController } from "./getTestsByDisciplinesControll
 function mockResponse() {
   const res = {
     send: () => {},
+    status: () => {},
   };
+  res.status = jest.fn().mockReturnValue(res);
   res.send = jest.fn().mockReturnValue(res);
   return res;
 }
+
 const repository = new TestRepository();
 const service = new GetTestsDisciplinesService(repository);
 const controller = new GetTestsByDisciplinesController(service);
@@ -28,6 +31,7 @@ describe("Get Tests By Discipline Controller", () => {
     await expect(controller.handle(null, res)).resolves.not.toThrow();
     expect(service.execute).toHaveBeenCalled();
     expect(repository.getAllTestsPerDiscipline).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(200);
     expect(res.send).toHaveBeenCalledWith([]);
   });
 });

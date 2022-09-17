@@ -1,41 +1,38 @@
-import { TestRepository } from "../../repositories/testRepository";
+import { mockTestRepository } from "../../repositories/mocks";
 import { CreateTestService } from "./createTestService";
-import { validateTeacherDisciplineService } from "../teacherDisciplineServices/index";
-import { validateCategoryService } from "../categoryServices/index";
-import { CustomError } from "../../entities/CustomError";
 
-const repository = new TestRepository();
+const validateCategoryExecuteSpy = jest.fn();
+const validateTeacherDisciplineSpy = jest.fn();
+const repository = mockTestRepository();
 
 const createTestService = new CreateTestService(
-  validateCategoryService,
-  validateTeacherDisciplineService,
+  { execute: validateCategoryExecuteSpy },
+  { execute: validateTeacherDisciplineSpy },
   repository
 );
 
 describe("Create Test Service", () => {
   it("Should be able to create a test", async () => {
-    jest.spyOn(validateCategoryService, "execute").mockResolvedValueOnce(true);
-    jest
-      .spyOn(validateTeacherDisciplineService, "execute")
-      .mockResolvedValue(true);
-    jest.spyOn(repository, "create").mockResolvedValueOnce();
+    validateCategoryExecuteSpy.mockResolvedValueOnce(true);
+    validateTeacherDisciplineSpy.mockResolvedValueOnce(true);
+    jest.spyOn(repository, "create").mockImplementationOnce(() => {});
 
     await expect(
       createTestService.execute({
         name: "test name",
-        categoryId: 1,
+        categoryId: 2,
         pdfUrl: "http://url.com",
         teacherDisciplineId: 1,
       })
     ).resolves.not.toThrow();
 
-    expect(validateCategoryService.execute).toHaveBeenCalled();
-    expect(validateTeacherDisciplineService.execute).toHaveBeenCalled();
+    expect(validateCategoryExecuteSpy).toHaveBeenCalled();
+    expect(validateTeacherDisciplineSpy).toHaveBeenCalled();
     expect(repository.create).toHaveBeenCalled();
   });
 
   it("Should not be able to create a test with invalid category", async () => {
-    jest.spyOn(validateCategoryService, "execute").mockResolvedValueOnce(false);
+    validateCategoryExecuteSpy.mockResolvedValueOnce(false);
 
     await expect(
       createTestService.execute({
@@ -44,16 +41,17 @@ describe("Create Test Service", () => {
         pdfUrl: "http://url.com",
         teacherDisciplineId: 1,
       })
-    ).rejects.toEqual(new CustomError("error_not_found", "Category not found"));
+    ).rejects.toEqual({
+      message: "Category not found",
+      type: "error_not_found",
+    });
 
-    expect(validateCategoryService.execute).toHaveBeenCalled();
+    expect(validateCategoryExecuteSpy).toHaveBeenCalled();
   });
 
   it("Should not be able to create a test with invalid teacher/discipline relation", async () => {
-    jest.spyOn(validateCategoryService, "execute").mockResolvedValueOnce(true);
-    jest
-      .spyOn(validateTeacherDisciplineService, "execute")
-      .mockResolvedValue(false);
+    validateCategoryExecuteSpy.mockResolvedValueOnce(true);
+    validateTeacherDisciplineSpy.mockResolvedValueOnce(false);
 
     await expect(
       createTestService.execute({
@@ -62,14 +60,12 @@ describe("Create Test Service", () => {
         pdfUrl: "http://url.com",
         teacherDisciplineId: 1,
       })
-    ).rejects.toEqual(
-      new CustomError(
-        "error_not_found",
-        "Teacher/Discipline relation not found"
-      )
-    );
+    ).rejects.toEqual({
+      message: "Teacher/Discipline relation not found",
+      type: "error_not_found",
+    });
 
-    expect(validateCategoryService.execute).toHaveBeenCalled();
-    expect(validateTeacherDisciplineService.execute).toHaveBeenCalled();
+    expect(validateCategoryExecuteSpy).toHaveBeenCalled();
+    expect(validateTeacherDisciplineSpy).toHaveBeenCalled();
   });
 });

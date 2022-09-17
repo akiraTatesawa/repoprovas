@@ -7,6 +7,6 @@ export class GetTestsByDisciplinesController extends Controller<IGetTestsDiscipl
   async handle(_req: Request, res: Response): Promise<void> {
     const tests = await this.service.execute();
 
-    res.send(tests);
+    res.status(200).send(tests);
   }
 }

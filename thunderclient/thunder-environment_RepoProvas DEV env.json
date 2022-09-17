@@ -1,0 +1,16 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "RepoProvas DEV env",
+    "dateExported": "2022-09-17T20:29:33.224Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "URL",
+            "value": "http://localhost:4000"
+        },
+        {
+            "name": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2MzQ0NjI1NH0.AgTJdbvUQSwaGleMg0Fo8I1K77ZdgSTLqQTfl46143E"
+        }
+    ]
+}

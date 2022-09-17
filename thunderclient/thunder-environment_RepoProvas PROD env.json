@@ -1,0 +1,16 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "RepoProvas PROD env",
+    "dateExported": "2022-09-17T20:29:49.712Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "URL",
+            "value": "https://repoprovas-api-20.herokuapp.com"
+        },
+        {
+            "name": "token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTY2MzQ0NjI4NX0.V_UM40LXhq7feEcgeRNy8rSSwr1ZkuAcjsd7jsHpfC4"
+        }
+    ]
+}

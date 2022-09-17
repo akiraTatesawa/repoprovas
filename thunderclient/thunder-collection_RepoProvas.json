@@ -1,0 +1,624 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "RepoProvas",
+    "dateExported": "2022-09-17T20:29:01.047Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "Auth",
+            "containerId": "",
+            "created": "2022-09-14T17:06:39.111Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "Test",
+            "containerId": "",
+            "created": "2022-09-15T14:56:46.763Z",
+            "sortNum": 20000,
+            "settings": {}
+        }
+    ],
+    "requests": [
+        {
+            "_id": "cd09b469-f704-4d90-8e14-c1aeed4b2575",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "Create User",
+            "url": "{{URL}}/sign-up",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2022-09-14T16:23:19.602Z",
+            "modified": "2022-09-17T18:21:20.491Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"random@gmail.com\",\n  \"password\": \"pass1234\",\n  \"confirmPassword\": \"pass1234\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "201"
+                }
+            ]
+        },
+        {
+            "_id": "b45b9a5f-88aa-414e-8839-ff29246c913f",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "409 :: Conflict Error",
+            "url": "{{URL}}/sign-up",
+            "method": "POST",
+            "sortNum": 15000,
+            "created": "2022-09-15T23:44:06.359Z",
+            "modified": "2022-09-15T23:48:22.499Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"random@gmail.com\",\n  \"password\": \"pass1234\",\n  \"confirmPassword\": \"pass1234\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "409"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "4617df27-14dd-4532-9633-9d7d7e5947dc",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "422 :: Unprocessable Entity User Registration Error",
+            "url": "{{URL}}/sign-up",
+            "method": "POST",
+            "sortNum": 17500,
+            "created": "2022-09-15T23:47:45.863Z",
+            "modified": "2022-09-15T23:48:47.875Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"random@gmail.com\",\n  \"password\": \"pass1234\",\n  \"confirmPassword\": \"pass1234\",\n  \"invalidField\": \"invalid\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "422"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "e734bdb1-43e1-40cb-bd84-8be448c38e19",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "Sign In",
+            "url": "{{URL}}/sign-in",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2022-09-14T16:57:49.278Z",
+            "modified": "2022-09-17T20:23:42.987Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"random@gmail.com\",\n  \"password\": \"pass1234\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json.token",
+                    "action": "setto",
+                    "value": "{{token}}"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "9fa7bc8e-6fcc-4c89-b12b-93fac7d03236",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "Create",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2022-09-15T14:57:00.857Z",
+            "modified": "2022-09-17T20:26:13.966Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Test Example\",\n  \"pdfUrl\": \"http://example.com\",\n  \"categoryId\": 2,\n  \"teacherDisciplineId\": 1\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "201"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "false"
+                }
+            ]
+        },
+        {
+            "_id": "f645ffe1-c0e0-42c3-8cec-e3d261f92aec",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "422 : : Unprocessable Entity Error",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 35000,
+            "created": "2022-09-15T23:38:47.235Z",
+            "modified": "2022-09-15T23:43:37.304Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Invalid Test Example\",\n  \"pdfUrl\": \"http://example.com\",\n  \"categoryId\": 1,\n  \"teacherDisciplineId\": 1,\n  \"invalidField\": \"test\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "422"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "f55b09cf-7f53-47a4-8aca-027a1a989d1a",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "404 :: Category Not Found Error",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2022-09-15T23:40:53.427Z",
+            "modified": "2022-09-15T23:41:56.780Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Invalid Category Example\",\n  \"pdfUrl\": \"http://example.com\",\n  \"categoryId\": 1000000000,\n  \"teacherDisciplineId\": 1\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "404"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "f29f9a27-d765-453f-b19d-4bb0d77fb7e6",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "404 :: Teacher/Discipline Not Found Error",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2022-09-15T23:42:22.509Z",
+            "modified": "2022-09-15T23:42:47.773Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Invalid Category Example\",\n  \"pdfUrl\": \"http://example.com\",\n  \"categoryId\": 1,\n  \"teacherDisciplineId\": 1000000000\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "404"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "924d1919-3b24-4989-8c4f-f058c00230dc",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "404 :: User Not Found Error",
+            "url": "{{URL}}/sign-in",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2022-09-15T23:49:23.083Z",
+            "modified": "2022-09-15T23:50:48.997Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"notfound@gmail.com\",\n  \"password\": \"pass1234\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "404"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "d3ddbe49-89a2-49a8-850f-d3c9a31cd608",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "401 :: Unauthorized Error",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2022-09-16T16:38:58.711Z",
+            "modified": "2022-09-17T20:26:42.965Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "invalid token"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "401"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "7528d344-8112-41b3-a737-b9e958ec4ffb",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "b2232ee7-c23f-4dad-8731-ea78274c3e7f",
+            "name": "401 :: Unauthorized Wrong Password Error",
+            "url": "{{URL}}/sign-in",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2022-09-15T23:51:25.053Z",
+            "modified": "2022-09-15T23:53:46.893Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"random@gmail.com\",\n  \"password\": \"wrongpassword\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "401"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "55ef33fb-ab4c-43d8-985a-9fda96404189",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "400 :: Bad Request Token Error",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2022-09-16T16:41:08.683Z",
+            "modified": "2022-09-16T16:43:30.743Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "400"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "05062214-27b5-4973-a8c1-19891a2fdf05",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "422 :: Invalid Token Format Error",
+            "url": "{{URL}}/tests",
+            "method": "POST",
+            "sortNum": 95000,
+            "created": "2022-09-16T16:42:34.629Z",
+            "modified": "2022-09-16T16:43:45.487Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}",
+                "bearerPrefix": "invalid"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "422"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "8cb913c9-3722-4086-8043-a2fc5f7da912",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "List Tests By Discipline",
+            "url": "{{URL}}/tests/disciplines",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2022-09-16T03:42:43.432Z",
+            "modified": "2022-09-16T16:58:39.192Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "b7824ba4-92d9-4e33-9a9e-edb5bcac319c",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "401 :: Unauthorized Error",
+            "url": "{{URL}}/tests/teachers",
+            "method": "GET",
+            "sortNum": 110000,
+            "created": "2022-09-17T20:18:57.785Z",
+            "modified": "2022-09-17T20:20:32.193Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "invalid token"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "401"
+                }
+            ]
+        },
+        {
+            "_id": "311a05f7-e797-4f77-bb62-4522ffcb08d0",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "400 :: Bad Request Token Error",
+            "url": "{{URL}}/tests/disciplines",
+            "method": "GET",
+            "sortNum": 115000,
+            "created": "2022-09-17T20:22:13.303Z",
+            "modified": "2022-09-17T20:22:51.420Z",
+            "headers": [],
+            "params": [],
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "400"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "facbe2ea-02bc-49c3-ad86-9fac755e84e2",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "List Tests By Teacher",
+            "url": "{{URL}}/tests/teachers",
+            "method": "GET",
+            "sortNum": 120000,
+            "created": "2022-09-16T23:00:20.992Z",
+            "modified": "2022-09-16T23:51:28.001Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{token}}"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "ce19684e-d6c7-498f-ad76-98837d15bc61",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "401 :: Unauthorized Error",
+            "url": "{{URL}}/tests/disciplines",
+            "method": "GET",
+            "sortNum": 130000,
+            "created": "2022-09-17T20:20:17.807Z",
+            "modified": "2022-09-17T20:20:20.888Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "invalid token"
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "401"
+                }
+            ]
+        },
+        {
+            "_id": "f8ebf73b-6a63-4073-a698-c8e2b1e17d12",
+            "colId": "02bfa0a1-ac93-4365-b28e-6cf198f658de",
+            "containerId": "cc548614-fd46-42a8-b210-42d39025f925",
+            "name": "400 :: Bad Request Token Error",
+            "url": "{{URL}}/tests/teachers",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2022-09-17T20:22:59.119Z",
+            "modified": "2022-09-17T20:23:06.656Z",
+            "headers": [],
+            "params": [],
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "400"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": "true"
+                }
+            ]
+        }
+    ],
+    "settings": {}
+}

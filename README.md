@@ -30,7 +30,11 @@
         - [Response](#response-3)
       - [Get Tests by Teacher](#get-tests-by-teacher)
         - [Response](#response-4)
-  - [NOTES](#notes-1)
+    - [NOTES](#notes-1)
+  - [Running the Project](#running-the-project)
+  - [Testing the API](#testing-the-api)
+    - [Endpoints (Thunder Client)](#endpoints-thunder-client)
+    - [Jest](#jest)
 
 ## Built With
 
@@ -310,7 +314,7 @@ GET /tests/teachers
 ]
 ```
 
-## NOTES
+### NOTES
 
 When a request returns an error, the response is a json:
 
@@ -320,3 +324,68 @@ When a request returns an error, the response is a json:
   "message": "Error Details"
 }
 ```
+
+## Running the Project
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/akiraTatesawa/repoprovas.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```bash
+    cd repoprovas/
+    ```
+
+3. Install the dependencies:
+
+    ```bash
+    npm install
+    ```
+
+4. Set your environment variables following the .env.sample file:
+
+    | Name              | Type     |
+    | :--------------- | :------- |
+    | `DATABASE_URL`   | `string` |
+    | `PORT`           | `number` |
+    | `JWT_SECRET`     | `number` |
+
+   ```ts
+    PORT=
+    DATABASE_URL=
+    JWT_SECRET=
+   ```
+
+5. Run the prisma migrations command:
+
+   ```bash
+   npx prisma migrate dev
+   ```
+
+   *This will automatically execute the `npx prisma db seed` command*
+
+6. Run the project on dev mode:
+
+    ```bash
+    npm run dev
+    ```
+
+## Testing the API
+
+### Endpoints (Thunder Client)
+
+1. Import the collection and environments on the `thunderclient/` directory;
+2. Set the `URL` environment variable on the Thunder Client DEV env;
+3. Go to the RepoProvas collection and you are ready to use the API!
+
+### Jest
+
+1. Create a `.env.test` file and set your testing database url `DATABASE_URL`;
+2. Run the command:
+
+    ```bash
+    npm run test
+    ```  

@@ -1,3 +1,4 @@
+import { mockTestService } from "../../services/testServices/mocks";
 import { CreateTestController } from "./createTestController";
 
 function mockResponse() {
@@ -18,20 +19,17 @@ function mockRequest() {
     }),
   };
 }
-
 describe("Create Test Controller", () => {
   it("Should be able to create a test and return 201", async () => {
-    const executeSpy = jest.fn();
+    const service = mockTestService();
     const res = mockResponse();
     const req = mockRequest();
 
-    const createTestController = new CreateTestController({
-      execute: executeSpy,
-    });
+    const createTestController = new CreateTestController(service);
     // @ts-ignore type safety error in tests
     await expect(createTestController.handle(req, res)).resolves.not.toThrow();
 
-    expect(executeSpy).toHaveBeenCalled();
+    expect(service.execute).toHaveBeenCalled();
     expect(res.sendStatus).toHaveBeenCalledWith(201);
   });
 });

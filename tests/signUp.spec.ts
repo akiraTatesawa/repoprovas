@@ -4,16 +4,15 @@ import { server } from "../src/app";
 import { prisma } from "../src/config/prisma";
 import { UserFactory } from "./factories/userFactory";
 
-beforeEach(async () => {
-  await prisma.$executeRaw`TRUNCATE TABLE users;`;
-});
-
-afterAll(async () => {
-  await prisma.$executeRaw`TRUNCATE TABLE users;`;
-  await prisma.$disconnect();
-});
-
 describe("POST /sign-up", () => {
+  beforeEach(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE users;`;
+  });
+
+  afterAll(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE users;`;
+    await prisma.$disconnect();
+  });
   it("Should create an user and return status 201", async () => {
     const user = new UserFactory().createUserRequest();
 
@@ -24,8 +23,8 @@ describe("POST /sign-up", () => {
   });
 
   it("Should return status 409 if the user is already registered", async () => {
-    const user = new UserFactory().createUserRequest();
-    await supertest(server).post("/sign-up").send(user);
+    // Fix
+    const user = await new UserFactory().createUser();
 
     const result = await supertest(server).post("/sign-up").send(user);
 

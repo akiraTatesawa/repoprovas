@@ -9,3 +9,29 @@ export function mockTestRepository() {
     getTestsByTeacher: getAllByTeacherSpy,
   };
 }
+
+export function mockUserRepository() {
+  const createSpy = jest.fn();
+  const getByEmailSpy = jest.fn();
+
+  return {
+    create: createSpy,
+    getByEmail: getByEmailSpy,
+  };
+}
+
+export function mockCategoryRepository() {
+  const getByIdSpy = jest.fn();
+
+  return {
+    getById: getByIdSpy,
+  };
+}
+
+export function mockTeacherDisciplineRepository() {
+  const getByIdSpy = jest.fn();
+
+  return {
+    getById: getByIdSpy,
+  };
+}

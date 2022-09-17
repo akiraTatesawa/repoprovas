@@ -1,32 +1,29 @@
+import { mockTeacherDisciplineRepository } from "../../repositories/mocks";
 import { ValidateTeacherDisciplineService } from "./validateId";
 
-const getByIdSpy = jest.fn();
-const validateTeacherDisciplineService = new ValidateTeacherDisciplineService({
-  getById: getByIdSpy,
-});
+const repository = mockTeacherDisciplineRepository();
+const validateTeacherDisciplineService = new ValidateTeacherDisciplineService(
+  repository
+);
 
 describe("Validate Teacher/Discipline Service", () => {
   it("Should return false if relation does not exists", async () => {
-    getByIdSpy.mockResolvedValueOnce(null);
+    jest.spyOn(repository, "getById").mockResolvedValueOnce(null);
 
     await expect(validateTeacherDisciplineService.execute(1)).resolves.toEqual(
       false
     );
 
-    expect(getByIdSpy).toHaveBeenCalled();
+    expect(repository.getById).toHaveBeenCalled();
   });
 
   it("Should return true if relation does exists", async () => {
-    getByIdSpy.mockResolvedValueOnce({
-      id: 1,
-      teacherId: 1,
-      disciplineId: 1,
-    });
+    jest.spyOn(repository, "getById").mockResolvedValueOnce({});
 
     await expect(validateTeacherDisciplineService.execute(1)).resolves.toEqual(
       true
     );
 
-    expect(getByIdSpy).toHaveBeenCalled();
+    expect(repository.getById).toHaveBeenCalled();
   });
 });

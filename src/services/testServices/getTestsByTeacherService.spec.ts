@@ -1,7 +1,7 @@
-import { TestRepository } from "../../repositories/testRepository";
+import { mockTestRepository } from "../../repositories/mocks";
 import { GetTestsTeacherService } from "./getTestsByTeacherService";
 
-const repository = new TestRepository();
+const repository = mockTestRepository();
 const service = new GetTestsTeacherService(repository);
 
 describe("Get Tests by Teacher Service", () => {

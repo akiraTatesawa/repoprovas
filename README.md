@@ -35,6 +35,7 @@
   - [Testing the API](#testing-the-api)
     - [Endpoints (Thunder Client)](#endpoints-thunder-client)
     - [Jest](#jest)
+  - [Lessons Learned](#lessons-learned)
 
 ## Built With
 
@@ -389,3 +390,12 @@ When a request returns an error, the response is a json:
     ```bash
     npm run test
     ```  
+
+## Lessons Learned
+
+- Integration and unit tests with Jest and Supertest;
+- Mocking and Factories on tests;
+- Use of Class Controllers and Abstract Classes;
+- Use of generics on Interfaces;
+- Use of Seeds on Prisma;
+- Thunder Client testing;

@@ -10,9 +10,6 @@ const registerUserService = new RegisterUserService(repository, cryptUtils);
 describe("Register User Service", () => {
   it("Should be able to create an user", async () => {
     jest.spyOn(repository, "getByEmail").mockResolvedValueOnce(null);
-    jest
-      .spyOn(registerUserService, "isMatching")
-      .mockImplementationOnce(() => true);
 
     await expect(
       registerUserService.execute({
@@ -23,15 +20,11 @@ describe("Register User Service", () => {
     ).resolves.not.toThrow();
 
     expect(repository.getByEmail).toHaveBeenCalled();
-    expect(registerUserService.isMatching).toHaveBeenCalled();
     expect(repository.create).toHaveBeenCalled();
   });
 
   it("Should not be able to create an user with unmatched password", async () => {
     jest.spyOn(repository, "getByEmail").mockResolvedValueOnce(null);
-    jest
-      .spyOn(registerUserService, "isMatching")
-      .mockImplementationOnce(() => false);
 
     await expect(
       registerUserService.execute({
@@ -45,7 +38,6 @@ describe("Register User Service", () => {
     });
 
     expect(repository.getByEmail).toHaveBeenCalled();
-    expect(registerUserService.isMatching).toHaveBeenCalled();
   });
 
   it("Should not be able to create an user that already is registered", async () => {

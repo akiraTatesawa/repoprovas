@@ -245,14 +245,14 @@ export class TestRepository implements ITestRepository {
         })
       );
     }
-    const categories = await Promise.all(categoriesPromise);
+    const categoriesWithTests = await Promise.all(categoriesPromise);
 
     const teacherTests = [];
     for (let j = 0; j < teachers.length; j++) {
       teacherTests.push({
         id: teachers[j].id,
         name: teachers[j].name,
-        categories: categories[j],
+        categories: categoriesWithTests[j],
       });
     }
 

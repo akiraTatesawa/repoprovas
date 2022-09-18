@@ -9,6 +9,23 @@ type CategoryType = Omit<Category, "createdAt">;
 
 type TermType = Omit<Term, "createdAt">;
 
+type CategoryTable = {
+  [key: number]: {
+    index: number;
+  };
+};
+
+type DisciplineTable = {
+  [key: number]: {
+    index: number;
+    categories: CategoryTable;
+  };
+};
+
+type TermTable = {
+  [key: number]: IDiscipline[] | [];
+};
+
 interface IDiscipline {
   id: number;
   name: string;
@@ -71,6 +88,9 @@ export class TestRepository implements ITestRepository {
 
   async getAllTestsPerDiscipline(): Promise<ITestsByDiscipline[]> {
     const terms: TermType[] = await prisma.term.findMany({
+      orderBy: {
+        id: "asc",
+      },
       select: {
         id: true,
         number: true,
@@ -78,6 +98,9 @@ export class TestRepository implements ITestRepository {
     });
 
     const disciplines: IDiscipline[] = await prisma.discipline.findMany({
+      orderBy: {
+        id: "asc",
+      },
       select: {
         id: true,
         name: true,
@@ -122,42 +145,54 @@ export class TestRepository implements ITestRepository {
       },
     });
 
-    const categoryTable: { [key: number]: boolean } = {};
+    // Create Categories Hash Table
+    const categoryTable: CategoryTable = {};
     for (let k = 0; k < categories.length; k++) {
-      categoryTable[categories[k].id] = true;
+      categoryTable[categories[k].id] = {
+        index: k,
+      };
     }
 
-    const disciplinesCategoriesTable: {
-      [key: number]: { [key: number]: boolean };
-    } = {};
+    // Create Disciplines With Categories Hash Table
+    const disciplinesCategoriesTable: DisciplineTable = {};
     for (let i = 0; i < disciplines.length; i++) {
-      disciplinesCategoriesTable[disciplines[i].id] = categoryTable;
+      disciplinesCategoriesTable[disciplines[i].id] = {
+        index: i,
+        categories: categoryTable,
+      };
     }
 
+    // Add the tests to the disciplines with categories Array
     for (let j = 0; j < tests.length; j++) {
       const testCategoryId = tests[j].categoryId;
       const testDisciplineId = tests[j].teacherDiscipline.disciplineId;
 
-      if (disciplinesCategoriesTable[testDisciplineId][testCategoryId]) {
-        disciplines[testDisciplineId - 1].categories[testCategoryId - 1].tests =
-          [
-            ...disciplines[testDisciplineId - 1].categories[testCategoryId - 1]
-              .tests,
-            tests[j],
-          ];
+      const discipline = disciplinesCategoriesTable[testDisciplineId];
+
+      if (discipline.categories[testCategoryId]) {
+        const disciplineIndex = discipline.index;
+        const categoryIndex = discipline.categories[testCategoryId].index;
+
+        disciplines[disciplineIndex].categories[categoryIndex].tests = [
+          ...disciplines[disciplineIndex].categories[categoryIndex].tests,
+          tests[j],
+        ];
       }
     }
 
-    const termsTable: { [key: number]: IDiscipline[] | [] } = {};
+    // Create Terms Hash Table
+    const termsTable: TermTable = {};
     for (let p = 0; p < terms.length; p++) {
       termsTable[terms[p].id] = [];
     }
 
+    // Add the disciplines Array to the Terms Hash Table
     for (let m = 0; m < disciplines.length; m++) {
       const { termId } = disciplines[m];
       termsTable[termId] = [...termsTable[termId], disciplines[m]];
     }
 
+    // Create the tests filtered by categories/disciplines/terms Array
     const testsPerTermsAndDisciplines = [];
     for (let n = 0; n < terms.length; n++) {
       testsPerTermsAndDisciplines.push({
